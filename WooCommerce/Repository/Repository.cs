@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using WooCommerce.Migrations;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using WooCommerce.Data;
 using WooCommerce.Repository.IRepository;

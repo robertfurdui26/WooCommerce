@@ -175,7 +175,7 @@ namespace WooCommerce.Areas.Customer.Controllers
                 _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCartVM.OrderHeader.Id, session.Id,session.PaymentIntentId);
                 _unitOfWork.Save();
 
-                Response.Headers.Add("Location",session.Id);
+                Response.Headers.Add("Location",session.Url);
                 return new StatusCodeResult(303);
             }
 

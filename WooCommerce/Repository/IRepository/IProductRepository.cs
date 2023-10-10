@@ -1,4 +1,4 @@
-﻿using WooCommerce.Migrations;
+﻿
 using WooCommerce.Models;
 
 namespace WooCommerce.Repository.IRepository

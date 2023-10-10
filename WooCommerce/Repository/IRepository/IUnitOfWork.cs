@@ -1,9 +1,10 @@
-﻿namespace WooCommerce.Repository.IRepository
+﻿using WooCommerce.Migrations;
+namespace WooCommerce.Repository.IRepository
 {
     public interface IUnitOfWork
     {
         ICategoryRepository Category { get; }
-        IProductRepository Product { get; }
+       IProductRepository Product { get; }
 
         ICompanyRepository Company { get; }
 

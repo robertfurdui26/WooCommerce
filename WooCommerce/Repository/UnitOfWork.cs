@@ -25,11 +25,12 @@ namespace WooCommerce.Repository
             _db = db;
             ApplicationUser = new ApplicationUserRepository(_db);
             Category = new CategoryRepository(_db);
-            Product = new ProductRepository(_db);
+           Product = new ProductRepository(_db);
             Company = new CompanyRepository(_db);
             ShoopingCart = new ShoopingCartRepository(_db);
-            OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
+
+            OrderDetail = new OrderDetailRepository(_db);
         }
 
 
