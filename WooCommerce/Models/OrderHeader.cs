@@ -8,7 +8,7 @@ namespace WooCommerce.Models
     {
         public int Id { get; set; }
 
-        public string ApplicatioUserId { get; set; }
+        public string ApplicationUserId { get; set; }
 
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
@@ -30,7 +30,7 @@ namespace WooCommerce.Models
 
         public DateTime PaymentDate { get; set; }
 
-
+        public string SessionId { get; set; }
         public string? PaymentIntentId { get; set; }
 
         [Required]

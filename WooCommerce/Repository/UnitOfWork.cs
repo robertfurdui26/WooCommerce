@@ -9,6 +9,8 @@ namespace WooCommerce.Repository
         public ICategoryRepository Category { get;  private  set; }
         public IProductRepository Product { get; private set; }
 
+        public ICompanyRepository Company { get; private set; }
+
         public IShoopingCartRepository ShoopingCart { get; private set; }
          
         public IApplicationUserRepository ApplicationUser { get; private set; }
@@ -24,6 +26,7 @@ namespace WooCommerce.Repository
             ApplicationUser = new ApplicationUserRepository(_db);
             Category = new CategoryRepository(_db);
             Product = new ProductRepository(_db);
+            Company = new CompanyRepository(_db);
             ShoopingCart = new ShoopingCartRepository(_db);
             OrderDetail = new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);

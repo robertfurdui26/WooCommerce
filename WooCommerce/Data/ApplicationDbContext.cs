@@ -14,6 +14,8 @@ namespace WooCommerce.Data
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Company> Companies { get; set; }
         public DbSet<ShoopingCart> ShoopingCarts { get; set; }
 
         public DbSet<OrderHeader> OrderHeaders { get; set; }
@@ -51,7 +53,37 @@ namespace WooCommerce.Data
                       DisplayOrder = 3
                   });
 
+            modelBuilder.Entity<Company>().HasData(
+                 new Company
+                 {
+                     Id = 1,
+                     Name = "Tech Solutio",
+                     StreetAddress = "123 Tech St",
+                     City = "Tech City",
+                     PostalCode = "676235",
+                     State = "Il",
+                     PhoneNumber = "3747878734"
 
+                 },
+                  new Company
+                  {
+                      Id = 2,
+                      Name = "BIOS Solutio",
+                      StreetAddress = "123 BIOS St",
+                      City = "BIOS City",
+                      PostalCode = "8827372",
+                      State = "Ar",
+                      PhoneNumber = "823578723"
+
+                  });
+
+
+
+                 
+                
+
+               
+            
 
 
             modelBuilder.Entity<Product>().HasData(
