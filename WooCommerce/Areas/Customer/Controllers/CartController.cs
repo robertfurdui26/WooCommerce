@@ -140,8 +140,10 @@ namespace WooCommerce.Areas.Customer.Controllers
                 var domain = "https://localhost:7287/";
                 var options = new SessionCreateOptions
                 {
-                    SuccessUrl = domain+ $"/customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
-                    CancelUrl = domain+"customer/cart/index",
+                    SuccessUrl = Url.Action("OrderConfirmation", "Cart", new { id = ShoppingCartVM.OrderHeader.Id, area = "Customer", }, Request.Scheme),
+                    CancelUrl = Url.Action("Index", "Cart", new { area = "Customer" }, Request.Scheme),
+
+
                     LineItems = new List<SessionLineItemOptions>(),
                    
                     Mode = "payment",
@@ -186,6 +188,27 @@ namespace WooCommerce.Areas.Customer.Controllers
 
         public IActionResult OrderConfirmation(int id)
         {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
+            if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+            {
+                //this is an order by customer
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
+
+                if(session.PaymentStatus.ToLower() == "paid")
+                {
+                    _unitOfWork.OrderHeader.UpdateStripePaymentId(id, session.Id, session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    _unitOfWork.Save();
+                }
+
+            }
+
+            List<ShoopingCart> shoopingCarts = _unitOfWork.ShoopingCart
+                .GetAll(u => u.ApplicationUserId==orderHeader.ApplicationUserId).ToList();
+            _unitOfWork.ShoopingCart.RemoveRange(shoopingCarts);
+            _unitOfWork.Save();
+            
             return View(id);
         }
 
