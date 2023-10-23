@@ -54,8 +54,8 @@ namespace WooCommerce.Data
 
 
             modelBuilder.Entity<Company>().HasData(
-    new Company
-    {
+           new Company
+            {
         Id = 1,
         Name = "Tech Solutio",
         StreetAddress = "123 Tech St",
@@ -64,9 +64,9 @@ namespace WooCommerce.Data
         State = "Il",
         PhoneNumber = "3747878734"
 
-    },
-     new Company
-     {
+              },
+              new Company
+              {
          Id = 2,
          Name = "BIOS Solutio",
          StreetAddress = "123 BIOS St",

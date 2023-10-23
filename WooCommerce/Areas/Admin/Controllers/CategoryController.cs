@@ -19,7 +19,7 @@ namespace WooCommerce.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Category> objCategory = _unitOfWork.Category.GetAll().ToList();
+            var objCategory = _unitOfWork.Category.GetAll().ToList();
             return View(objCategory);
         }
 
@@ -30,9 +30,7 @@ namespace WooCommerce.Areas.Admin.Controllers
             return View();
         }
 
-
         [HttpPost]
-
         public IActionResult Create(Category obj)
         {
             if (obj.Name == obj.DisplayOrder.ToString())
@@ -53,7 +51,6 @@ namespace WooCommerce.Areas.Admin.Controllers
         }
 
         [HttpGet]
-
         public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
@@ -70,9 +67,7 @@ namespace WooCommerce.Areas.Admin.Controllers
             return View(catDb);
         }
 
-
         [HttpPost]
-
         public IActionResult Edit(Category obj)
         {
             if (ModelState.IsValid)
@@ -87,7 +82,6 @@ namespace WooCommerce.Areas.Admin.Controllers
         }
 
         [HttpGet]
-
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -106,9 +100,7 @@ namespace WooCommerce.Areas.Admin.Controllers
             return View(cateDb);
         }
 
-
         [HttpPost, ActionName("Delete")]
-
         public IActionResult DeletePost(int? id)
         {
             Category? obj = _unitOfWork.Category.Get(u => u.Id == id);

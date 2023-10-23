@@ -1,17 +1,10 @@
 ﻿var dataTable;
-
 $(document).ready(function () {
     var url = new URL(window.location.href);
     var status = url.searchParams.get("status");
-
-    // Set a default status if it's not provided in the URL
     status = status || "all";
-
     loadDataTable(status);
-
 });
-   
-
 function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
         "ajax": { url: '/admin/order/getall?status=' + status },

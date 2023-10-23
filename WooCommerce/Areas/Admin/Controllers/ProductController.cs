@@ -18,22 +18,19 @@ namespace WooCommerce.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
         public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
-
         }
         public IActionResult Index()
         {
-            List<Product> objProduct = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
+            var objProduct = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
           
             return View(objProduct);
         }
 
         [HttpGet]
-
         public IActionResult Upsert(int? id)
         {
             ProductVM productVM = new()
@@ -47,21 +44,13 @@ namespace WooCommerce.Areas.Admin.Controllers
             };
             if (id == null || id == 0)
             {
-                //create
                 return View(productVM);
             }
-            else
-            {
-                //update
                 productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
                 return View(productVM);
-            }
-
         }
 
-
         [HttpPost]
-
         public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             if (ModelState.IsValid)
@@ -83,8 +72,6 @@ namespace WooCommerce.Areas.Admin.Controllers
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-
-
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -117,9 +104,6 @@ namespace WooCommerce.Areas.Admin.Controllers
             }
         }
 
-
-
-
         #region API CALLS
 
         [HttpGet]
@@ -128,7 +112,6 @@ namespace WooCommerce.Areas.Admin.Controllers
             List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
             return Json(new { data = objProductList });
         }
-
 
         [HttpDelete]
         public IActionResult Delete(int? id)
@@ -139,8 +122,7 @@ namespace WooCommerce.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error while deleting" });
             }
 
-            var oldImagePath =
-                           Path.Combine(_webHostEnvironment.WebRootPath,
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath,
                            productToBeDeleted.ImageUrl.TrimStart('\\'));
 
             if (System.IO.File.Exists(oldImagePath))

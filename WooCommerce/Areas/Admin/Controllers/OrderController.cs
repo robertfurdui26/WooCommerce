@@ -14,8 +14,6 @@ namespace WooCommerce.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-
-
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -34,23 +32,6 @@ namespace WooCommerce.Areas.Admin.Controllers
             };
             return View(orderVM);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         #region API CALLS
 
@@ -80,7 +61,6 @@ namespace WooCommerce.Areas.Admin.Controllers
                 default:
                     break;
             }
-
 
             return Json(new { data = objOrderHeaderList });
         }

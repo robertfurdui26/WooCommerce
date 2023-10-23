@@ -12,8 +12,6 @@ namespace WooCommerce.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-
-
         public HomeController(ILogger<HomeController> logger,IUnitOfWork unitOfWork)
         {
             _logger = logger;
@@ -22,7 +20,7 @@ namespace WooCommerce.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> productsList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            var  productsList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
             return View(productsList);
         }
 
@@ -51,17 +49,13 @@ namespace WooCommerce.Areas.Customer.Controllers
 
             if(cartDb != null)
             {
-                //shopping cart exists
+                
                 cartDb.Count += shopcart.Count;
                 _unitOfWork.ShoopingCart.Update(cartDb);
-
-
             }
             else
             {
-                //add a cart
                 _unitOfWork.ShoopingCart.Add(shopcart);
-
             }
             TempData["success"] = "Order Place  successfully";
             _unitOfWork.Save();

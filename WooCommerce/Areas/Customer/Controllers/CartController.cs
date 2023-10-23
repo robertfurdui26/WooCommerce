@@ -32,7 +32,6 @@ namespace WooCommerce.Areas.Customer.Controllers
                 OrderHeader = new()
             };
 
-
             foreach( var cart in ShoppingCartVM.ShoopingCartsList )
             {
                 cart.Price = GetPriceBaseOnQuantity( cart );
@@ -54,10 +53,7 @@ namespace WooCommerce.Areas.Customer.Controllers
                 OrderHeader = new()
             };
 
-
             ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u=> u.Id == userId);
-
-
 
             ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
             ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
@@ -71,9 +67,6 @@ namespace WooCommerce.Areas.Customer.Controllers
                 cart.Price = GetPriceBaseOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
-
-
-
             return View(ShoppingCartVM);
         }
 
@@ -92,10 +85,6 @@ namespace WooCommerce.Areas.Customer.Controllers
 
             ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
 
-
-
-
-
             foreach (var cart in ShoppingCartVM.ShoopingCartsList)
             {
                 cart.Price = GetPriceBaseOnQuantity(cart);
@@ -104,13 +93,11 @@ namespace WooCommerce.Areas.Customer.Controllers
 
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
-                //it is a regular custommer account
                 ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
                 ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusPending;
             }
             else
             {
-                //company user
                 ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
                 ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusApproved;
             }
@@ -129,20 +116,15 @@ namespace WooCommerce.Areas.Customer.Controllers
                 };
                 _unitOfWork.OrderDetail.Add(orderDetail);
                 _unitOfWork.Save();
-            }
-
-            
+            }           
 
             if(applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
-                //it is a regular customer accound and we need to capture a payment
-                //stripe logic
                 var domain = "https://localhost:7287/";
                 var options = new SessionCreateOptions
                 {
                     SuccessUrl = Url.Action("OrderConfirmation", "Cart", new { id = ShoppingCartVM.OrderHeader.Id, area = "Customer", }, Request.Scheme),
                     CancelUrl = Url.Action("Index", "Cart", new { area = "Customer" }, Request.Scheme),
-
 
                     LineItems = new List<SessionLineItemOptions>(),
                    
@@ -168,8 +150,6 @@ namespace WooCommerce.Areas.Customer.Controllers
 
                     options.LineItems.Add(sessionLineItem);
                 }
-
-
                 var service = new SessionService();
               Session session =   service.Create(options);
 
@@ -181,7 +161,6 @@ namespace WooCommerce.Areas.Customer.Controllers
                 return new StatusCodeResult(303);
             }
 
-
             return RedirectToAction(nameof(OrderConfirmation),new {id=ShoppingCartVM.OrderHeader.Id});
         }
         
@@ -191,7 +170,6 @@ namespace WooCommerce.Areas.Customer.Controllers
             OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
             if(orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
             {
-                //this is an order by customer
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.SessionId);
 
@@ -204,14 +182,13 @@ namespace WooCommerce.Areas.Customer.Controllers
 
             }
 
-            List<ShoopingCart> shoopingCarts = _unitOfWork.ShoopingCart
+            var shoopingCarts = _unitOfWork.ShoopingCart
                 .GetAll(u => u.ApplicationUserId==orderHeader.ApplicationUserId).ToList();
             _unitOfWork.ShoopingCart.RemoveRange(shoopingCarts);
             _unitOfWork.Save();
             
             return View(id);
         }
-
         public IActionResult Plus(int cartId)
         {
             var cartFromDb = _unitOfWork.ShoopingCart.Get(u => u.Id == cartId);
@@ -239,16 +216,11 @@ namespace WooCommerce.Areas.Customer.Controllers
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
 
-            
-
         }
-
-
         public IActionResult Remove(int cartId)
         {
             var cartFromDb = _unitOfWork.ShoopingCart.Get(u => u.Id == cartId);
             
-                //reomve that from cart
                 _unitOfWork.ShoopingCart.Remove(cartFromDb);
           
             

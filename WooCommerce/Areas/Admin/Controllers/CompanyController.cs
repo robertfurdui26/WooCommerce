@@ -13,7 +13,6 @@ namespace WooCommerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = SD.Role_Admin)]
-
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,8 +20,6 @@ namespace WooCommerce.Areas.Admin.Controllers
         public CompanyController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            
-
         }
         public IActionResult Index()
         {
@@ -32,18 +29,14 @@ namespace WooCommerce.Areas.Admin.Controllers
         }
 
         [HttpGet]
-
         public IActionResult Upsert(int? id)
         {
-           
             if (id == null || id == 0)
             {
-                //create
                 return View(new Company());
             }
             else
             {
-                //update
                 Company companyObj = _unitOfWork.Company.Get(u => u.Id == id);
                 return View(companyObj);
             }
@@ -52,13 +45,10 @@ namespace WooCommerce.Areas.Admin.Controllers
 
 
         [HttpPost]
-
         public IActionResult Upsert(Company companyObj)
         {
             if (ModelState.IsValid)
             {
-                  
-
                 if (companyObj.Id == 0)
                 {
                     _unitOfWork.Company.Add(companyObj);
@@ -71,16 +61,12 @@ namespace WooCommerce.Areas.Admin.Controllers
                 _unitOfWork.Save();
                 TempData["success"] = "Company created successfully";
                 return RedirectToAction("Index");
-
             }
             else
             {
                 return View(companyObj);
             }
         }
-
-
-
 
         #region API CALLS
 
@@ -100,9 +86,6 @@ namespace WooCommerce.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
-
-            
-
             _unitOfWork.Company.Remove(productToBeDeleted);
             _unitOfWork.Save();
 
